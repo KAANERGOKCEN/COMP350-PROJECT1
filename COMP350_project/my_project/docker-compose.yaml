@@ -1,0 +1,64 @@
+version: '3.8'
+
+services:
+  app_b:
+    build: ./service_b
+    networks:
+      - backend
+    depends_on:
+      - db
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://application_1:1001/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  app_c:
+    build: ./service_c
+    networks:
+      - backend
+    depends_on:
+      - db
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://application_2:1000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  nginx:
+    image: nginx:latest
+    ports:
+      - "8085:80"
+      - "8086:81"
+    volumes:
+      - type: bind
+        source: ./nginx.conf
+        target: /etc/nginx/default.conf
+    networks:
+      - backend
+    depends_on:
+      app_b:
+        condition: service_healthy
+      app_c:
+        condition: service_healthy
+
+  db:
+    image: postgres:latest
+    volumes:
+      - db_data:/var/lib/postgresql/data
+      - type: bind
+        source: ./db/init.sql
+        target: /docker-entrypoint-initdb.d/init.sql
+    networks:
+      - backend
+    environment:
+      POSTGRES_DB: mydb
+      POSTGRES_USER: kaan
+      POSTGRES_PASSWORD: 0909
+
+networks:
+  backend:
+    driver: bridge
+
+volumes:
+  db_data:

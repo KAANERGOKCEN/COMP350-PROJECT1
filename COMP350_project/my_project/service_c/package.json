@@ -1,0 +1,14 @@
+{
+  "name": "application_2",
+  "version": "1.0.0",
+  "description": "Node.js backend for listing and deleting records",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.1",
+    "pg": "^8.7.3"
+  }
+}
+

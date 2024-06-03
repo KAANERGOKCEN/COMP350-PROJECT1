@@ -1,0 +1,15 @@
+{
+  "name": "application_1",
+  "version": "1.0.0",
+  "description": "Node.js backend for handling form submissions",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.1",
+    "pg": "^8.7.3",
+    "body-parser": "^1.19.1"
+  }
+}
+
